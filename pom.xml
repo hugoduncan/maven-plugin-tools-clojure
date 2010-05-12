@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>maven-clojure</groupId>
+  <artifactId>maven-plugin-tools-clojure</artifactId>
+  <version>0.1.0-SNAPSHOT</version>
+
+  <name>Maven Plugin Tool for Clojure</name>
+  <description>Descriptor extractor for Maven Mojo's written in Clojure.</description>
+
+  <dependencies>
+    <!-- clojure -->
+    <dependency>
+      <groupId>org.clojure</groupId>
+      <artifactId>clojure</artifactId>
+      <version>1.2.0-master-SNAPSHOT</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.clojure</groupId>
+      <artifactId>clojure-contrib</artifactId>
+      <version>1.2.0-SNAPSHOT</version>
+    </dependency>
+
+    <dependency>
+      <groupId>maven-plugin-annotations-clojure</groupId>
+      <artifactId>maven-plugin-annotations-clojure</artifactId>
+      <version>0.1.0-SNAPSHOT</version>
+    </dependency>
+
+    <!-- maven -->
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-project</artifactId>
+      <version>2.0.6</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-plugin-descriptor</artifactId>
+      <version>2.0.6</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.plugin-tools</groupId>
+      <artifactId>maven-plugin-tools-api</artifactId>
+      <version>${pluginToolsVersion}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.plugin-tools</groupId>
+      <artifactId>maven-plugin-tools-model</artifactId>
+      <version>${pluginToolsVersion}</version>
+    </dependency>
+
+    <!-- plexus -->
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+      <version>1.5.6</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-container-default</artifactId>
+      <version>1.0-alpha-9-stable-1</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <resources>
+      <resource>
+	<directory>src/main/clojure</directory>
+      </resource>
+      <resource>
+	<directory>src/main/resources</directory>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+	<groupId>com.theoryinpractise</groupId>
+	<artifactId>clojure-maven-plugin</artifactId>
+	<version>1.3.2</version>
+	<configuration>
+	  <sourceDirectories>
+	    <sourceDirectory>src/main/clojure</sourceDirectory>
+	  </sourceDirectories>
+	  <testSourceDirectories>
+	    <testSourceDirectory>src/test/clojure</testSourceDirectory>
+	  </testSourceDirectories>
+	  <clojureOptions>-Xmx512m -Djava.awt.headless=true -XX:MaxPermSize=256m</clojureOptions>
+	  <warnOnReflection>true</warnOnReflection>
+	  <testDeclaredNamespaceOnly>false</testDeclaredNamespaceOnly>
+	  <!-- we want the AOT compile sanity check, but still only ship source -->
+	  <outputDirectory>${project.build.directory}/clojure-classes</outputDirectory>
+	</configuration>
+	<executions>
+	  <execution>
+	    <id>compile-clojure</id>
+	    <phase>compile</phase>
+	    <goals>
+	      <goal>compile</goal>
+	    </goals>
+	  </execution>
+	  <execution>
+	    <id>test-clojure</id>
+	    <phase>test</phase>
+	    <goals>
+	      <goal>test</goal>
+	    </goals>
+	  </execution>
+	</executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <properties>
+    <pluginToolsVersion>2.5.1</pluginToolsVersion>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+</project>
